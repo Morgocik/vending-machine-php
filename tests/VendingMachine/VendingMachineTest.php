@@ -31,11 +31,27 @@ class VendingMachineTest extends TestCase
         $this->assertEquals(true,  $this->vendingMachine->addMoney('s'));
     }
 
-    public function testReturnMoney()
+
+    /**
+     * @dataProvider coinsProviderReturn
+     * @param $inputCoins
+     * @param $expectedCount
+     */
+    public function testReturnMoney($inputCoins, $expectedCount)
     {
-        $this->vendingMachine->addMoney('s');
-        $this->vendingMachine->addMoney('q');
-        $this->assertEquals(['s','q'],  $this->vendingMachine->returnMoney());
+        foreach ($inputCoins as $coin) {
+            $this->vendingMachine->addMoney($coin);
+        }
+        $this->assertEquals($expectedCount,  $this->vendingMachine->returnMoney());
+    }
+
+    public function coinsProviderReturn()
+    {
+        return [
+            [['s'], ['s']],
+            [['s', 's'], ['s', 's']],
+            [['s', 's', 'q'], ['s', 's', 'q']],
+        ];
     }
 
     public function testIsCoinsTwo()
